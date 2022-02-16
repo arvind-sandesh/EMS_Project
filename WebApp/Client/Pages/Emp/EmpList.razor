@@ -1,0 +1,51 @@
+﻿@page "/employeelist"
+@using WebApp.Shared
+@using WebApp.Shared.Models
+@inject HttpClient Http
+<h3>Employee List</h3>
+@if (empList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>@recordCount</h3>
+    <div class="table-fluid">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fullname</th>
+                    <th>Gender</th>
+                    <th>DoB</th>
+                    <th>Mobile</th>
+                    <th>EmailId</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var employee in empList)
+                {
+                    <tr>
+                        <td>@employee.EmployeeId</td>
+                        <td>@employee.Fullname</td>
+                        <td>@employee.Gender</td>
+                        <td>@employee.DateOfBirth.ToShortDateString()</td>
+                        <td>@employee.MobileNumber</td>
+                        <td>@employee.EmailId</td>
+                        <td>@employee.Department.DepartmentName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@code {
+     private Employee[]? empList;
+     private string recordCount = "0";
+    protected override async Task OnInitializedAsync()
+    {
+        empList = await Http.GetFromJsonAsync<Employee[]>("Emp");
+        recordCount ="Total Records : " + empList.Count().ToString();
+    }
+}
