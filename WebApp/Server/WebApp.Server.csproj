@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Client\WebApp.Client.csproj" />
     <ProjectReference Include="..\Shared\WebApp.Shared.csproj" />
   </ItemGroup>
