@@ -41,11 +41,14 @@ else
     </div>
 }
 @code {
-     private Employee[]? empList;
-     private string recordCount = "0";
+    private Employee[]? empList;
+    private string recordCount = "0";
     protected override async Task OnInitializedAsync()
     {
         empList = await Http.GetFromJsonAsync<Employee[]>("Emp");
-        recordCount ="Total Records : " + empList.Count().ToString();
+        if (empList != null)
+        {
+            recordCount = "Total Records : " + empList.Count().ToString();
+        }
     }
 }

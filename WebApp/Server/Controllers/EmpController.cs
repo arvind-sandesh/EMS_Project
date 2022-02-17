@@ -9,15 +9,18 @@ namespace WebApp.Server.Controllers
     public class EmpController : ControllerBase
     {
         private readonly IEmpService emp;
+        private readonly ILogger<EmpController> logger;
 
-        public EmpController(IEmpService emp)
+        public EmpController(IEmpService emp,ILogger<EmpController> logger)
         {
             this.emp = emp;
+            this.logger = logger;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var res= await emp.GetAll();
+            logger.LogInformation("Get Employee Data...");
             return Ok(res);
         }
     }
