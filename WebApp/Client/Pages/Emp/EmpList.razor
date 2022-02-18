@@ -2,10 +2,12 @@
 @using WebApp.Shared
 @using WebApp.Shared.Models
 @inject HttpClient Http
+
 <h3>Employee List</h3>
+
 @if (empList == null)
-{
-    <p><em>Loading...</em></p>
+{  
+    <div class="spinner"></div>
 }
 else
 {
@@ -43,12 +45,16 @@ else
 @code {
     private Employee[]? empList;
     private string recordCount = "0";
+
     protected override async Task OnInitializedAsync()
     {
-        empList = await Http.GetFromJsonAsync<Employee[]>("Emp");
+        empList = await Http.GetFromJsonAsync<Employee[]>("emp");
+
         if (empList != null)
         {
             recordCount = "Total Records : " + empList.Count().ToString();
         }
     }
+
+   // protected override async Task OnInitializedAsync() => empList = await Http.GetFromJsonAsync<Employee[]>("emp");
 }

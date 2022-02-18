@@ -1,9 +1,21 @@
 ﻿@page "/"
-
+@using WebApp.Shared
+@using WebApp.Shared.Models
+@inject HttpClient Http
+@inject ILogger<WebApp.Client.Pages.Index> logger
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+<button @onclick="AddNew">Add New</button>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code{
+
+    protected async Task AddNew()
+    {
+        logger.LogInformation("click add button");
+        var addItem = new Employee { DateOfBirth=DateTime.Now.AddYears(-21), DepartmentId=1, EmailId="abc1@gmail.com", EmployeeId=0, FirstName="Test", LastName="Name", Gender="Male", MobileNumber="8182823388" };
+        await Http.PostAsJsonAsync("emp", addItem);
+    }
+}

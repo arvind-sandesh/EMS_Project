@@ -37,7 +37,7 @@ namespace WebApp.Server.Services
 
         public async Task<List<Employee>> GetAll()
         {
-            return await db.Employees.ToListAsync();
+            return await db.Employees.Include(x=>x.Department).ToListAsync();
         }
 
         public async Task<Employee> GetById(int id)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Server.Services;
+using WebApp.Shared.Models;
 
 namespace WebApp.Server.Controllers
 {
@@ -21,6 +22,14 @@ namespace WebApp.Server.Controllers
         {
             var res= await emp.GetAll();
             logger.LogInformation("Get Employee Data...");
+            return Ok(res);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEmp(Employee employee)
+        {
+            var res = await emp.Create(employee);
+            logger.LogInformation("Create New Employee...Controller");
             return Ok(res);
         }
     }
