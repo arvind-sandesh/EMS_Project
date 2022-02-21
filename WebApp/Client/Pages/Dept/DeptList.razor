@@ -1,0 +1,49 @@
+﻿@page "/deptlist"
+@using WebApp.Shared
+@using WebApp.Shared.Models
+@inject HttpClient Http
+<h3>Department List</h3>
+
+@if (deptList == null)
+{  
+    <div class="spinner"></div>
+}
+else
+{
+    <h3>@recordCount</h3>
+    <div class="table-fluid">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Department</th>                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dept in deptList)
+                {
+                    <tr>
+                        <td>@dept.DepartmentId</td>
+                        <td>@dept.DepartmentName</td>                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@code {
+    private Department[]? deptList;
+    private string recordCount = "0";
+
+    protected override async Task OnInitializedAsync()
+    {
+        deptList = await Http.GetFromJsonAsync<Department[]>("emp/deptlist");
+
+        if (deptList != null)
+        {
+            recordCount = "Total Department Records : " + deptList.Count().ToString();
+        }
+    }
+
+   // protected override async Task OnInitializedAsync() => empList = await Http.GetFromJsonAsync<Employee[]>("emp");
+}

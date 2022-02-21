@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 var constr = builder.Configuration.GetConnectionString("ConStr");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(constr));
 builder.Services.AddScoped<IEmpService,EmpService>();
+builder.Services.AddScoped<IDeptService, DeptService>();
 //--------------------------//
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

@@ -1,4 +1,5 @@
-﻿using WebApp.Shared.Models;
+﻿using System.Linq.Expressions;
+using WebApp.Shared.Models;
 
 namespace WebApp.Server.Services
 {
@@ -26,6 +27,11 @@ namespace WebApp.Server.Services
         }
 
         public Task<Employee> Update(Employee employee)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<Employee> FindByCondition(Expression<Func<Employee, bool>> expression)
         {
             throw new NotImplementedException();
         }

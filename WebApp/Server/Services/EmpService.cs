@@ -1,5 +1,6 @@
 ﻿using DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using WebApp.Shared.Models;
 
 namespace WebApp.Server.Services
@@ -33,6 +34,11 @@ namespace WebApp.Server.Services
                 db.Employees.Remove(emp);
                 await db.SaveChangesAsync();
             }
+        }
+
+        public IQueryable<Employee> FindByCondition(Expression<Func<Employee, bool>> expression)
+        {
+            return this.db.Set<Employee>().Where(expression).AsNoTracking();
         }
 
         public async Task<List<Employee>> GetAll()
