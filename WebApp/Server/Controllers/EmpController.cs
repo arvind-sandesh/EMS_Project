@@ -51,5 +51,13 @@ namespace WebApp.Server.Controllers
             logger.LogInformation("Get Dept list.");
             return Ok(res);
         }
+
+        [HttpPost("RegDept")]
+        public async Task<IActionResult> CreateDept(Department department)
+        {
+            var res = await dept.Create(department);
+            logger.LogInformation("Create New Department...Controller");
+            return Ok(res);
+        }
     }
 }

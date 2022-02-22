@@ -1,0 +1,28 @@
+﻿@page "/DeptCreate"
+@using WebApp.Shared
+@using WebApp.Shared.Models
+@inject HttpClient Http
+@inject ILogger<WebApp.Client.Pages.Index> logger
+<h3>Dept Create</h3>
+ <NavLink href="deptlist" >Department List</NavLink><br /><br />
+<EditForm Model="@deptObj" OnValidSubmit="AddNew">
+    <DataAnnotationsValidator />
+    <ValidationSummary />  
+
+    <div class="mb-3">
+        <label for="fname" class="form-label">First Name</label>
+        <InputText id="fname" class="form-control" autofocus @bind-Value="deptObj.DepartmentName" />
+        <ValidationMessage For="@(()=>deptObj.DepartmentName)" class="text-danger" />
+    </div>
+    <button type="submit" class="btn btn-sm btn-success">Add New</button>
+</EditForm>
+
+@code {
+    private Department deptObj = new() { DepartmentId=0 };
+    protected async Task AddNew()
+    {
+            logger.LogInformation("click add button for dept...");
+            //var addItem = new Employee { DateOfBirth = DateTime.Now.AddYears(-21), DepartmentId = 1, EmailId = "abc1@gmail.com", EmployeeId = 0, FirstName = "Test", LastName = "Name", Gender = "Male", MobileNumber = "8182823388" };
+            await Http.PostAsJsonAsync("emp/RegDept", deptObj);
+    }
+}

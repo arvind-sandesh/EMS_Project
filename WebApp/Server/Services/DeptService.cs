@@ -11,9 +11,15 @@ namespace WebApp.Server.Services
         {
             this.db = db;
         }
-        public Task<int> Create(Department department)
+        public async Task<int> Create(Department department)
         {
-            throw new NotImplementedException();
+            int res = 0;
+            if (department != null)
+            {
+                await db.Departments.AddAsync(department);
+                res = await db.SaveChangesAsync();
+            }
+            return res;
         }
 
         public Task Delete(int id)
