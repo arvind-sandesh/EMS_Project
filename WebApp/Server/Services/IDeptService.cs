@@ -8,6 +8,6 @@ namespace WebApp.Server.Services
         Task<Department> GetById(int id);
         Task<int> Create(Department department);
         Task<Department> Update(Department department);
-        Task Delete(int id);
+        Task<int> Delete(int id);
     }
 }

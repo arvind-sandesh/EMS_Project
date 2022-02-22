@@ -2,10 +2,12 @@
 @using WebApp.Shared
 @using WebApp.Shared.Models
 @inject HttpClient Http
+@inject ILogger<WebApp.Client.Pages.Dept.DeptList> logger
+@inject IJSRuntime Js
 <h3>Department List</h3>
- <NavLink href="deptcreate" >Add Department</NavLink>
+<NavLink href="deptcreate" class="btn btn-sm btn-primary"><i class="oi oi-plus"></i> Add</NavLink>
 @if (deptList == null)
-{  
+{
     <div class="spinner"></div>
 }
 else
@@ -16,7 +18,8 @@ else
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Department</th>                   
+                    <th>Department</th>
+                    <th>Task</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,7 +27,10 @@ else
                 {
                     <tr>
                         <td>@dept.DepartmentId</td>
-                        <td>@dept.DepartmentName</td>                        
+                        <td>@dept.DepartmentName</td>
+                        <td>
+                            <a class="btn btn-sm btn-success" href="dept/@dept.DepartmentId">Edit</a>&nbsp;
+                            <button class="btn btn-sm btn-danger" @onclick="@(()=>delDept(dept.DepartmentId))">Delete</button></td>
                     </tr>
                 }
             </tbody>
@@ -37,6 +43,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await recordLoad();
+    }
+    private async Task recordLoad()
+    {
         deptList = await Http.GetFromJsonAsync<Department[]>("emp/deptlist");
 
         if (deptList != null)
@@ -44,6 +54,18 @@ else
             recordCount = "Total Department Records : " + deptList.Count().ToString();
         }
     }
+    protected async Task delDept(int id)
+    {
+        bool confirmed = await Js.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            HttpResponseMessage res = await Http.DeleteAsync("emp/dept/" + id);
+            logger.LogInformation(res.ToString());
+            if (res.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                await recordLoad();
+            }
+        }
+    }
 
-   // protected override async Task OnInitializedAsync() => empList = await Http.GetFromJsonAsync<Employee[]>("emp");
 }

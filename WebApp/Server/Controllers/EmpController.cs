@@ -29,11 +29,15 @@ namespace WebApp.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmp(Employee employee)
+        public async Task<IActionResult> CreateEmp([FromBody] Employee employee)
         {
-            var res = await emp.Create(employee);
-            logger.LogInformation("Create New Employee...Controller");
-            return Ok(res);
+            if (ModelState.IsValid)
+            {
+                var res = await emp.Create(employee);
+                logger.LogInformation("Create New Employee...Controller");
+                return Ok(res);
+            }
+            return BadRequest("Invalid Object...");
         }
 
         [HttpGet("GetByName/{name}")]
@@ -52,11 +56,48 @@ namespace WebApp.Server.Controllers
             return Ok(res);
         }
 
+        
         [HttpPost("RegDept")]
         public async Task<IActionResult> CreateDept(Department department)
         {
             var res = await dept.Create(department);
             logger.LogInformation("Create New Department...Controller");
+            return Ok(res);
+        }
+
+        [HttpDelete("dept/{id:int}")]
+        public async Task<IActionResult> DeleteDept(int id)
+        {  
+            logger.LogInformation("Delete Department...Controller");
+            var res = await dept.Delete(id);
+            if(res == 0)
+            {
+                return NotFound("Dept Id not found...");
+            }      
+            return Ok(res);
+        }
+
+        [HttpGet("dept/{id:int}")]
+        public async Task<IActionResult> GetDept(int id)
+        {
+            logger.LogInformation("Delete Department...Controller");
+            var res = await dept.GetById(id);
+            if (res ==null)
+            {
+                return NotFound("Dept Id not found...");
+            }
+            return Ok(res);
+        }
+
+        [HttpPut("dept/Update")]
+        public async Task<IActionResult> UpdateDept(Department deptObj)
+        {
+            logger.LogInformation("Update Department...Controller");
+            var res = await dept.Update(deptObj);
+            if (res == null)
+            {
+                return NotFound("Dept Id not found...");
+            }
             return Ok(res);
         }
     }

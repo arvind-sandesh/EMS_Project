@@ -1,0 +1,23 @@
+﻿@using WebApp.Shared.Models
+<EditForm Model="@deptObj" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />  
+
+    <div class="mb-3">
+        <label for="fname" class="form-label">Dept Name</label>
+        <InputText id="fname" class="form-control" autofocus @bind-Value="deptObj.DepartmentName" />
+        <ValidationMessage For="@(()=>deptObj.DepartmentName)" class="text-danger" />
+    </div>
+    <button type="submit" class="btn btn-sm btn-success">@ButtonText</button>
+</EditForm>
+
+@code {
+    [Parameter] 
+    public Department deptObj { get; set; }
+
+    [Parameter] 
+    public string ButtonText { get; set; } = "Save";
+
+    [Parameter] 
+    public EventCallback OnValidSubmit { get; set; }
+}

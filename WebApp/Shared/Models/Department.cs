@@ -14,6 +14,7 @@ namespace WebApp.Shared.Models
 
         [Required]
         [StringLength(100)]
+        [Display(Name ="Department Name")]
         public string DepartmentName { get; set; }
     }
 }

@@ -1,0 +1,28 @@
+﻿@page "/dept/{id:int}"
+@using WebApp.Shared.Models
+@inject HttpClient Http
+@inject ILogger<WebApp.Client.Pages.Dept.DeptUpdate> logger
+@inject NavigationManager NavManager
+@inject IJSRuntime Js
+<h3>Department Update</h3>
+
+<DeptForm ButtonText="Update" OnValidSubmit="@EditDepartment" deptObj="@dept"></DeptForm>
+
+@code {
+    [Parameter] 
+    public int Id { get; set; }
+
+    Department dept = new Department();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        dept = await Http.GetFromJsonAsync<Department>($"emp/dept/{Id}");
+    }
+
+    async Task EditDepartment()
+    {
+       var res= await Http.PutAsJsonAsync("emp/dept/Update", dept);
+       await Js.InvokeVoidAsync("alert", $"Updated Successfully!");
+       NavManager.NavigateTo("/deptlist");
+    }
+}

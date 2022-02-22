@@ -22,14 +22,21 @@ namespace WebApp.Server.Services
             return res;
         }
 
-        public Task Delete(int id)
+        public async Task<int> Delete(int id)
         {
-            throw new NotImplementedException();
+            int res = 0;
+            var dept = db.Departments.Find(id);
+            if(dept != null)
+            {
+                db.Departments.Remove(dept);
+              res= await db.SaveChangesAsync();
+            } 
+            return (int)res;
         }
 
-        public Task<Department> GetById(int id)
+        public async Task<Department> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await db.Departments.FindAsync(id);
         }
 
         public async Task<IEnumerable<Department>> List()
@@ -37,9 +44,15 @@ namespace WebApp.Server.Services
             return await db.Departments.ToListAsync();
         }
 
-        public Task<Department> Update(Department department)
+        public async Task<Department> Update(Department department)
         {
-            throw new NotImplementedException();
+            if (department != null)
+            {
+                db.Entry<Department>(department).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return department;
+            }
+            return department;
         }
     }
 }
