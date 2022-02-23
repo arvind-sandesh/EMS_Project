@@ -19,7 +19,7 @@ namespace WebApp.Shared.Models
         [StringLength(20)]
         public string Gender { get; set; }
 
-        [Required]
+        [Required]        
         public DateTime DateOfBirth { get; set; }
 
         [Required]

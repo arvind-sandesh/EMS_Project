@@ -1,0 +1,71 @@
+﻿@page "/list"
+@inject HttpClient Http
+<h3>List</h3>
+<h3>@recordCount</h3>
+<h3>Record Selected: @SelectedEmployeesCount</h3>
+<input type="checkbox" id="showFooter" @bind="ShowFooter" />
+<label for="showFooter">Show Footer</label>
+<input type="text" value="@Search" @onchange="@((e)=>getResult(e.Value.ToString()))" />
+
+@if (empList == null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <div class="row">
+        @foreach (var employee in empList)
+        {
+            <div class="col-md-4">
+                <EmpDetail Emp="employee" FooterShow="ShowFooter" OnEmployeeSelection="EmployeeSelectionChanged"/>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    public IEnumerable<Employee> empList { get; set; }
+    public bool ShowFooter { get; set; } = true;
+    public string Search { get; set; } = string.Empty;
+    private string recordCount = "0";
+    protected override async Task OnInitializedAsync()
+    {
+        if (!String.IsNullOrWhiteSpace(Search))
+        {
+            empList = await Http.GetFromJsonAsync<Employee[]>("emp/GetByName/" + Search);
+        }
+        else
+        {
+            empList = await Http.GetFromJsonAsync<Employee[]>("emp");
+        }
+
+        if (empList != null)
+        {
+            recordCount = "Total Records Found : " + empList.Count().ToString();
+        }
+        else
+        {
+            recordCount = "";
+            SelectedEmployeesCount = 0;
+        }
+    }
+    public async Task getResult(string str)
+    {
+        Search = str;
+        await OnInitializedAsync();
+    }
+
+    protected int SelectedEmployeesCount { get; set; } = 0;
+
+    protected void EmployeeSelectionChanged(bool isSelected)
+    {
+        if(isSelected)
+        {
+            SelectedEmployeesCount++;
+        }
+        else
+        {
+            SelectedEmployeesCount--;
+        }
+    }
+}

@@ -1,0 +1,43 @@
+﻿
+<div class="card m-3 shadow">
+    <div class="card-header">
+        <h3>@Emp.Fullname</h3>
+        <input type="checkbox" checked="@IsSelected" @onchange="CheckBoxChanged" />
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Name: @Emp.Fullname</h5>
+        <p class="card-text">
+            Gender: @Emp.Gender <br />
+            Date of Birth: @Emp.DateOfBirth.ToShortDateString()<br/>
+            Mobile Number: @Emp.MobileNumber<br />
+            Email : @Emp.EmailId<br />         
+        </p>
+        
+    </div>
+    @if (FooterShow)
+    {
+        <div class="card-footer text-center">
+            <a href="@($"employeedetails/{Emp.EmployeeId}")" class="btn btn-primary m-1">View</a>
+            <a href="#" class="btn btn-primary m-1">Edit</a>
+            <a href="#" class="btn btn-danger m-1">Delete</a>
+        </div>
+    }
+</div>
+@code {
+    [Parameter]
+    public Employee Emp { get; set; }
+
+    [Parameter]
+    public bool FooterShow { get; set; }
+
+    protected bool IsSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnEmployeeSelection { get; set; }
+
+    protected async Task CheckBoxChanged(ChangeEventArgs e)
+    {
+        IsSelected = (bool)e.Value;
+        await OnEmployeeSelection.InvokeAsync(IsSelected);
+    }
+}

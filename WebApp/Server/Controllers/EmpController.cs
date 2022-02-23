@@ -14,7 +14,7 @@ namespace WebApp.Server.Controllers
         private readonly ILogger<EmpController> logger;
         private readonly IDeptService dept;
 
-        public EmpController(IEmpService emp,ILogger<EmpController> logger,IDeptService dept)
+        public EmpController(IEmpService emp, ILogger<EmpController> logger, IDeptService dept)
         {
             this.emp = emp;
             this.logger = logger;
@@ -23,7 +23,7 @@ namespace WebApp.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var res= await emp.GetAll();
+            var res = await emp.GetAll();
             logger.LogInformation("Get Employee Data...");
             return Ok(res);
         }
@@ -43,8 +43,8 @@ namespace WebApp.Server.Controllers
         [HttpGet("GetByName/{name}")]
         public async Task<IActionResult> GetByExpression(string name)
         {
-            var res = await emp.FindByCondition(x=>x.FirstName.Contains(name) || x.LastName.Contains(name)).ToListAsync();
-            logger.LogInformation("Get Employee from name...");
+            var res = await emp.FindByCondition(x => x.FirstName.Contains(name) || x.LastName.Contains(name)).ToListAsync();
+            if (res.Count == 0) return NoContent();
             return Ok(res);
         }
 
@@ -56,7 +56,7 @@ namespace WebApp.Server.Controllers
             return Ok(res);
         }
 
-        
+
         [HttpPost("RegDept")]
         public async Task<IActionResult> CreateDept(Department department)
         {
@@ -67,13 +67,13 @@ namespace WebApp.Server.Controllers
 
         [HttpDelete("dept/{id:int}")]
         public async Task<IActionResult> DeleteDept(int id)
-        {  
+        {
             logger.LogInformation("Delete Department...Controller");
             var res = await dept.Delete(id);
-            if(res == 0)
+            if (res == 0)
             {
                 return NotFound("Dept Id not found...");
-            }      
+            }
             return Ok(res);
         }
 
@@ -82,7 +82,7 @@ namespace WebApp.Server.Controllers
         {
             logger.LogInformation("Delete Department...Controller");
             var res = await dept.GetById(id);
-            if (res ==null)
+            if (res == null)
             {
                 return NotFound("Dept Id not found...");
             }
