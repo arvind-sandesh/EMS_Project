@@ -43,7 +43,7 @@ namespace WebApp.Server.Services
         }
         public async Task<Employee> GetById(int id)
         {
-            var emp=await db.Employees.SingleOrDefaultAsync(x=>x.EmployeeId==id);
+            var emp=await db.Employees.Include(x=>x.Department).SingleOrDefaultAsync(x=>x.EmployeeId==id);
             return emp;
         }
         public async Task<Employee> Update(Employee employee)
@@ -51,6 +51,8 @@ namespace WebApp.Server.Services
            Employee emp =await db.Employees.FindAsync(employee.EmployeeId);
             if(emp != null)
             {
+               
+                db.Entry(emp).State = EntityState.Modified; 
                 emp = employee;
                 db.SaveChanges();
             }

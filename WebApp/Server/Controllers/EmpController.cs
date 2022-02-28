@@ -20,10 +20,19 @@ namespace WebApp.Server.Controllers
             this.logger = logger;
             this.dept = dept;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var res = await emp.GetAll();
+            logger.LogInformation("Get Employee Data...");
+            return Ok(res);
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var res = await emp.GetById(id);
             logger.LogInformation("Get Employee Data...");
             return Ok(res);
         }
@@ -35,6 +44,18 @@ namespace WebApp.Server.Controllers
             {
                 var res = await emp.Create(employee);
                 logger.LogInformation("Create New Employee...Controller");
+                return Ok(res);
+            }
+            return BadRequest("Invalid Object...");
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateEmp([FromBody] Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await emp.Update(employee);
+                logger.LogInformation("Update Employee...");
                 return Ok(res);
             }
             return BadRequest("Invalid Object...");

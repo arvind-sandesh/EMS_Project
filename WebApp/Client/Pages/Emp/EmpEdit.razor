@@ -1,0 +1,28 @@
+﻿@page "/emp/{id:int}"
+@using WebApp.Shared.Models
+@inject HttpClient Http
+@inject ILogger<WebApp.Client.Pages.Dept.DeptUpdate> logger
+@inject NavigationManager NavManager
+@inject IJSRuntime Js
+<h3>Employee Update</h3>
+
+<EmpForm ButtonText="Update" OnValidSubmit="@EditEmp" EmpObj="@Emp"></EmpForm>
+
+@code {
+    [Parameter] 
+    public int Id { get; set; }
+
+    Employee Emp = new Employee();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        Emp = await Http.GetFromJsonAsync<Employee>($"emp/{Id}");
+    }
+
+    async Task EditEmp()
+    {
+       var res= await Http.PutAsJsonAsync("emp", Emp);
+       await Js.InvokeVoidAsync("alert", $"Updated Successfully!");
+       NavManager.NavigateTo("/");
+    }
+}
