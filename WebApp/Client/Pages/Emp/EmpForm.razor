@@ -1,56 +1,62 @@
-﻿<EditForm Model="@empObj" OnValidSubmit="OnValidSubmit">
+﻿@inject HttpClient Http
+
+<EditForm Model="@EmpObj" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="mb-3">
         <label for="dept" class="form-label">Department</label>
-        <InputSelect id="dept" class="form-select" @bind-Value="empObj.DepartmentId">
-            <option value="0">-Department-</option>
-            <option value="1">Dep 1</option>
-            <option value="2">Dep 2</option>
-            <option value="3">Dep 3</option>
+        <InputSelect id="dept" class="form-select" @bind-Value="EmpObj.DepartmentId">
+            <option value="">-Department-</option>
+            @if (deptList != null)
+            {
+                @foreach (var dept in deptList)
+                {
+                    <option value="@dept.DepartmentId">@dept.DepartmentName</option>
+                }
+            }
         </InputSelect>
-        <ValidationMessage For="@(()=>empObj.DepartmentId)" class="text-danger" />
+        <ValidationMessage For="@(()=>EmpObj.DepartmentId)" class="text-danger" />
     </div>
 
     <div class="mb-3">
         <label for="fname" class="form-label">First Name</label>
-        <InputText id="fname" class="form-control" autofocus @bind-Value="empObj.FirstName" />
-        <ValidationMessage For="@(()=>empObj.FirstName)" class="text-danger" />
+        <InputText id="fname" class="form-control" @bind-Value="EmpObj.FirstName" />
+        <ValidationMessage For="@(()=>EmpObj.FirstName)" class="text-danger" />
     </div>
 
     <div class="mb-3">
         <label for="lname" class="form-label">Last Name</label>
-        <InputText id="lname" class="form-control" autofocus @bind-Value="empObj.LastName" />
-        <ValidationMessage For="@(()=>empObj.LastName)" class="text-danger" />
+        <InputText id="lname" class="form-control" @bind-Value="EmpObj.LastName" />
+        <ValidationMessage For="@(()=>EmpObj.LastName)" class="text-danger" />
     </div>
 
     <div class="mb-3">
         <label for="gender" class="form-label">Gender</label>
-        <InputSelect id="gender" class="form-select" @bind-Value="empObj.Gender">
-            <option value="0">-Gender-</option>
+        <InputSelect id="gender" class="form-select" @bind-Value="EmpObj.Gender">
+            <option value="">-Gender-</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
         </InputSelect>
-        <ValidationMessage For="@(()=>empObj.Gender)" class="text-danger" />
+        <ValidationMessage For="@(()=>EmpObj.Gender)" class="text-danger" />
     </div>
 
-   <div class="mb-3">
+    <div class="mb-3">
         <label for="dob" class="form-label">Date of Birth</label>
-        <InputDate id="dob" class="form-control" @bind-Value="empObj.DateOfBirth" />       
-        <ValidationMessage For="@(()=>empObj.DateOfBirth)" class="text-danger" />
+        <InputDate id="dob" class="form-control" @bind-Value="EmpObj.DateOfBirth" />
+        <ValidationMessage For="@(()=>EmpObj.DateOfBirth)" class="text-danger" />
     </div>
 
     <div class="mb-3">
         <label for="mobile" class="form-label">Mobile Number</label>
-        <InputDate id="mobile" class="form-control" @bind-Value="empObj.MobileNumber" />
-        <ValidationMessage For="@(()=>empObj.MobileNumber)" class="text-danger" />
+        <InputText id="mobile" class="form-control" @bind-Value="EmpObj.MobileNumber" />
+        <ValidationMessage For="@(()=>EmpObj.MobileNumber)" class="text-danger" />
     </div>
 
     <div class="mb-3">
         <label for="email" class="form-label">Email Id</label>
-        <InputDate id="email" class="form-control" @bind-Value="empObj.EmailId" />
-        <ValidationMessage For="@(()=>empObj.EmailId)" class="text-danger" />
+        <InputText id="email" class="form-control" @bind-Value="EmpObj.EmailId" />
+        <ValidationMessage For="@(()=>EmpObj.EmailId)" class="text-danger" />
     </div>
 
     <button type="submit" class="btn btn-sm btn-success">@ButtonText</button>
@@ -58,11 +64,18 @@
 
 @code {
     [Parameter]
-    public Employee empObj { get; set; }
+    public Employee EmpObj { get; set; } = new();
 
-    [Parameter] 
+    [Parameter]
     public string ButtonText { get; set; } = "Save";
 
-    [Parameter] 
+    [Parameter]
     public EventCallback OnValidSubmit { get; set; }
+
+    private Department[]? deptList;
+
+    protected async override Task OnInitializedAsync()
+    {
+        deptList = await Http.GetFromJsonAsync<Department[]>("emp/deptlist");        
+    }
 }

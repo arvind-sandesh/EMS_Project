@@ -9,7 +9,6 @@ namespace WebApp.Server.Services
     {
         private readonly AppDbContext db;
         private readonly ILogger<EmpService> logger;
-
         public EmpService(AppDbContext db, ILogger<EmpService> logger)
         {
             this.db = db;
@@ -25,7 +24,6 @@ namespace WebApp.Server.Services
             }
             return res;
         }
-
         public async Task Delete(int id)
         {
             var emp = await db.Employees.SingleOrDefaultAsync(x => x.EmployeeId == id);
@@ -35,23 +33,19 @@ namespace WebApp.Server.Services
                 await db.SaveChangesAsync();
             }
         }
-
         public IQueryable<Employee> FindByCondition(Expression<Func<Employee, bool>> expression)
         {
             return this.db.Set<Employee>().Where(expression).AsNoTracking();
         }
-
         public async Task<List<Employee>> GetAll()
         {
             return await db.Employees.Include(x=>x.Department).ToListAsync();
         }
-
         public async Task<Employee> GetById(int id)
         {
             var emp=await db.Employees.SingleOrDefaultAsync(x=>x.EmployeeId==id);
             return emp;
         }
-
         public async Task<Employee> Update(Employee employee)
         {            
            Employee emp =await db.Employees.FindAsync(employee.EmployeeId);
