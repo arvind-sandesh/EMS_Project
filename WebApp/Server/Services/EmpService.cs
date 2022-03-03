@@ -48,12 +48,18 @@ namespace WebApp.Server.Services
         }
         public async Task<Employee> Update(Employee employee)
         {            
-           Employee emp =await db.Employees.FindAsync(employee.EmployeeId);
+           Employee emp = await db.Employees.FindAsync(employee.EmployeeId);
             if(emp != null)
             {
                
                 db.Entry(emp).State = EntityState.Modified; 
-                emp = employee;
+                emp.FirstName = employee.FirstName;
+                emp.LastName = employee.LastName;
+                emp.Gender= employee.Gender;
+                emp.DateOfBirth= employee.DateOfBirth;
+                emp.EmailId= employee.EmailId;
+                emp.MobileNumber= employee.MobileNumber;
+                emp.DepartmentId= employee.DepartmentId;
                 db.SaveChanges();
             }
             return emp;
